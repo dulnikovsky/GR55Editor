@@ -9,7 +9,7 @@ ApplicationWindow {
 
     header : TextField {
         id: nameTextField
-        width: 180
+        //width: 180
         maximumLength: 16
         text: patchnamewrapper.name
         onTextChanged: patchnamewrapper.name = text

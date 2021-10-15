@@ -49,10 +49,71 @@ void PatchPcmWrapper::setLevel(int newVal)
         return;
 
     quint8 newval8 = (newVal*127)/100;
-
     patch->setData(baseOffset+ToneLevel, newval8, true);
-
     emit levelChanged(newVal);
+}
+
+
+int PatchPcmWrapper::getOctave() const
+{
+    char *data = patch->data(baseOffset+Octave, 1);
+    if(data == nullptr) return 0;
+
+    return (int)data[0]-0x40;
+}
+void PatchPcmWrapper::setOctave(int newVal)
+{
+    if(newVal == getOctave())
+        return;
+
+    quint8 newval8 = newVal+0x40;
+    patch->setData(baseOffset+Octave, newval8, true);
+    emit octaveChanged(newVal);
+}
+
+bool PatchPcmWrapper::getChromatic() const
+{
+    char *data = patch->data(baseOffset+Chromatic, 1);
+    if(data == nullptr) return false;
+    bool val = data[0];
+    return val;
+}
+
+void PatchPcmWrapper::setChromatic(bool val)
+{
+    if (getChromatic() == val) return;
+    patch->setData(baseOffset+Chromatic, (quint8)(val), true);
+    emit chromaticChanged(val);
+}
+
+bool PatchPcmWrapper::getLegato() const
+{
+    char *data = patch->data(baseOffset+Legato, 1);
+    if(data == nullptr) return false;
+    bool val = data[0];
+    return val;
+}
+
+void PatchPcmWrapper::setLegato(bool val)
+{
+    if (getLegato() == val) return;
+    patch->setData(baseOffset+Legato, (quint8)(val), true);
+    emit legatoChanged(val);
+}
+
+bool PatchPcmWrapper::getNuance() const
+{
+    char *data = patch->data(baseOffset+Nuance, 1);
+    if(data == nullptr) return false;
+    bool val = data[0];
+    return val;
+}
+
+void PatchPcmWrapper::setNuance(bool val)
+{
+    if (getNuance() == val) return;
+    patch->setData(baseOffset+Nuance, (quint8)(val), true);
+    emit nuanceChanged(val);
 }
 
 void PatchPcmWrapper::onDataChanged(unsigned int offset, int lenght, bool byUserControl)
@@ -60,11 +121,18 @@ void PatchPcmWrapper::onDataChanged(unsigned int offset, int lenght, bool byUser
     if(byUserControl)
         return;
 
-    //if(baseOffset+offset)
+    if( offset < baseOffset || offset >= baseOffset+lenght)
+        return;
+
+    qDebug("Patch PCM Changed: baseoffset=%d, offset=%d, length=%d", baseOffset, offset, lenght);
 
     emit waveformChanged(getWaveform());
     emit toneswitchChanged(getToneSwitch());
     emit levelChanged(getLevel());
+    emit octaveChanged(getOctave());
+    emit chromaticChanged(getChromatic());
+    emit legatoChanged(getLegato());
+    emit nuanceChanged(getNuance());
 }
 
 const QStringList PatchPcmWrapper::toneNameList =

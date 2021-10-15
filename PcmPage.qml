@@ -10,11 +10,11 @@ Page {
     width: 600
     height: 400
 
-    header: Label {
-        text: parent.title
-        font.pixelSize: Qt.application.font.pixelSize
-        padding: 10
-    }
+//    header: Label {
+//        text: parent.title
+//        font.pixelSize: Qt.application.font.pixelSize
+//        padding: 10
+//    }
 
     ColumnLayout {
         id: layout
@@ -23,13 +23,14 @@ Page {
 
         Button {
             checkable: true
-            text: qsTr("On")
             checked: wrapper.toneswitch
-            onToggled: wrapper.toneswitch = checked
+            text: checked?qsTr("On"):qsTr("Off")
+            onToggled: { wrapper.toneswitch = checked; text = checked?qsTr("On"):qsTr("Off"); }
         }
 
         SpinBox {
             value: wrapper.level
+            editable: true
             from: 0
             to: 100
             onValueModified: wrapper.level = value
@@ -40,6 +41,33 @@ Page {
             model: wrapper.toneList
             currentIndex: wrapper.waveform
             onActivated: wrapper.waveform = currentIndex
+        }
+
+        SpinBox {
+            value: wrapper.octave
+            editable: true
+            from: -3
+            to: 3
+            onValueModified: wrapper.octave = value
+        }
+
+        Button {
+            checkable: true
+            checked: wrapper.chromatic
+            text: checked?qsTr("On"):qsTr("Off")
+            onToggled: { wrapper.chromatic = checked; text = checked?qsTr("On"):qsTr("Off");}
+        }
+        Button {
+            checkable: true
+            checked: wrapper.legato
+            text: checked?qsTr("On"):qsTr("Off")
+            onToggled: { wrapper.legato = checked; text = checked?qsTr("On"):qsTr("Off");}
+        }
+        Button {
+            checkable: true
+            checked: wrapper.nuance
+            text: checked?qsTr("On"):qsTr("Off")
+            onToggled: { wrapper.nuance = checked; text = checked?qsTr("On"):qsTr("Off");}
         }
     }
 }
