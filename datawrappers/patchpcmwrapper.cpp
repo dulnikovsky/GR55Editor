@@ -116,6 +116,93 @@ void PatchPcmWrapper::setNuance(bool val)
     emit nuanceChanged(val);
 }
 
+int PatchPcmWrapper::getPan() const
+{
+    char *data = patch->data(baseOffset+Pan, 1);
+    if(data == nullptr)
+        return 0;
+    return ((((int)data[0])+1)*100)/127-50;
+}
+void PatchPcmWrapper::setPan(int newVal)
+{
+    if(newVal == getPan())
+        return;
+
+    quint8 newval8 = ((newVal+50)*127)/100;
+    patch->setData(baseOffset+Pan, newval8, true);
+    emit panChanged(newVal);
+}
+
+int PatchPcmWrapper::getPitchShift() const
+{
+    char *data = patch->data(baseOffset+PitchShift, 1);
+    if(data == nullptr)
+        return 0;
+    return ((int)data[0])-64;
+}
+void PatchPcmWrapper::setPitchShift(int newVal)
+{
+    if(newVal == getPitchShift())
+        return;
+
+    quint8 newval8 = newVal+64;
+    patch->setData(baseOffset+PitchShift, newval8, true);
+    emit pitchshiftChanged(newVal);
+}
+
+int PatchPcmWrapper::getPitchFine() const
+{
+    char *data = patch->data(baseOffset+PitchFine, 1);
+    if(data == nullptr)
+        return 0;
+    return (int)data[0] - 64;
+}
+void PatchPcmWrapper::setPitchFine(int newVal)
+{
+    if(newVal == getPitchFine())
+        return;
+
+    quint8 newval8 = newVal+64;
+    patch->setData(baseOffset+PitchFine, newval8, true);
+    emit pitchfineChanged(newVal);
+}
+
+int PatchPcmWrapper::getPortamento() const
+{
+    char *data = patch->data(baseOffset+Portamento, 1);
+    if(data == nullptr)
+        return -1;
+    return data[0];
+}
+void PatchPcmWrapper::setPortamento(int newVal)
+{
+    if(newVal == getPortamento())
+        return;
+
+    quint8 newval8 = newVal;
+    patch->setData(baseOffset+Portamento, newval8, true);
+    emit portamentoChanged(newVal);
+}
+
+int PatchPcmWrapper::getPortamentoTime() const
+{
+    char *data = patch->data(baseOffset+PortamentoTime, 1);
+    if(data == nullptr)
+        return -1;
+    return ((((data[0] << 4) | data[1])+1)*100)/127;
+}
+void PatchPcmWrapper::setPortamentoTime(int newVal)
+{
+    if(newVal == getPortamentoTime())
+        return;
+
+    newVal = (newVal*127)/100;
+
+    quint16 newval16 = ((newVal << 4) & 0x0F00) | (newVal & 0x0F);
+    patch->setData(baseOffset+PortamentoTime, newval16, true);
+    emit portamentotimeChanged(newVal);
+}
+
 void PatchPcmWrapper::onDataChanged(unsigned int offset, int lenght, bool byUserControl)
 {
     if(byUserControl)
@@ -133,6 +220,11 @@ void PatchPcmWrapper::onDataChanged(unsigned int offset, int lenght, bool byUser
     emit chromaticChanged(getChromatic());
     emit legatoChanged(getLegato());
     emit nuanceChanged(getNuance());
+    emit panChanged(getPan());
+    emit pitchshiftChanged(getPitchShift());
+    emit pitchfineChanged(getPitchFine());
+    emit portamentoChanged(getPortamento());
+    emit portamentotimeChanged(getPortamentoTime());
 }
 
 const QStringList PatchPcmWrapper::toneNameList =

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 
 ApplicationWindow {
     width: 800
-    height: 480
+    height: 600
     visible: true
     title: qsTr("GR-55 Editor")
 

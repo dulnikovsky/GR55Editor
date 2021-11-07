@@ -24,7 +24,7 @@ bool Patch::setData(unsigned int addressOffset, quint16 val, bool byUserControl)
     unsigned int dataOffs = addrOffsetToDataOffset(addressOffset);
 
     char valArr[2];
-    valArr[0] = (val >> 7) & 0x7f;
+    valArr[0] = (val >> 8) & 0x7f;
     valArr[1] = (val & 0x7f);
 
     if(dataOffs == static_cast<unsigned int>(dataArr.size()))
