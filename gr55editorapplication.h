@@ -67,16 +67,6 @@ private:
         *dest++ = (val >> (8-1)) & 0x7F;
         *dest++ = val  & 0x7F;
     }
-
-    constexpr quint32 sevenBitToUint32( unsigned char msb, unsigned char mcleft, unsigned char mcright, unsigned char lsb) const
-    {
-        quint32 val=0;
-        val |= (static_cast<quint32>(msb))<<(24-3);
-        val |= (static_cast<quint32>(mcleft))<<(16-2);
-        val |= (static_cast<quint32>(mcright))<<(8-1);
-        val |= (static_cast<quint32>(lsb))<<(0);
-        return val;
-    }
 };
 
 #endif // GR55EDITORAPPLICATION_H

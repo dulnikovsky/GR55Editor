@@ -95,7 +95,13 @@ unsigned int Patch::addrOffsetToDataOffset(unsigned int addrOffset)
 const QMap<Patch::SysExDataOffset, Patch::SysExDataType> Patch::dataDefMap =
 {
     {Patch::SysExDataOffset::Common, {Patch::SysExDataTypeID::Common, Patch::SysExDataLength::Common}},
+    {Patch::SysExDataOffset::MFX, {Patch::SysExDataTypeID::MFX, Patch::SysExDataLength::MFX}},
+    {Patch::SysExDataOffset::ChorDlyRevEq, {Patch::SysExDataTypeID::ChorDlyRevEq, Patch::SysExDataLength::ChorDlyRevEq}},
+    {Patch::SysExDataOffset::Preamp, {Patch::SysExDataTypeID::Preamp, Patch::SysExDataLength::Preamp}},
+    {Patch::SysExDataOffset::Modeling, {Patch::SysExDataTypeID::Modeling, Patch::SysExDataLength::Modeling}},
     {Patch::SysExDataOffset::PcmTone1, {Patch::SysExDataTypeID::PCMTone, Patch::SysExDataLength::PCMTone}},
-    {Patch::SysExDataOffset::PcmTone2, {Patch::SysExDataTypeID::PCMTone, Patch::SysExDataLength::PCMTone}}
+    {Patch::SysExDataOffset::PcmTone2, {Patch::SysExDataTypeID::PCMTone, Patch::SysExDataLength::PCMTone}},
+    {Patch::SysExDataOffset::PcmFilter1, {Patch::SysExDataTypeID::PCMFilter, Patch::SysExDataLength::PCMFilter}},
+    {Patch::SysExDataOffset::PcmFilter2, {Patch::SysExDataTypeID::PCMFilter, Patch::SysExDataLength::PCMFilter}}
 };
 

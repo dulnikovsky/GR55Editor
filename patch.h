@@ -4,6 +4,11 @@
 #include <QObject>
 #include <QMap>
 
+constexpr quint32 sevenBitToUint32( const unsigned char msb, const unsigned char mcleft, const unsigned char mcright, const unsigned char lsb)
+{
+    return (msb<<(24-3)) | (mcleft<<(16-2)) | (mcright<<(8-1)) | (lsb<<0);
+}
+
 class Patch : public QObject
 {
     Q_OBJECT
@@ -12,20 +17,36 @@ public:
     enum class SysExDataTypeID
     {
         Common,
-        PCMTone
+        MFX,
+        ChorDlyRevEq,
+        Preamp,
+        Modeling,
+        PCMTone,
+        PCMFilter
     };
 
     enum class SysExDataOffset
     {
         Common = 0x00,
-        PcmTone1 = 0x1000,
-        PcmTone2 = 0x1080
+        MFX =           sevenBitToUint32( 0x00, 0x00, 0x03, 0x00),
+        ChorDlyRevEq =  sevenBitToUint32( 0x00, 0x00, 0x06, 0x00),
+        Preamp =        sevenBitToUint32( 0x00, 0x00, 0x07, 0x00),
+        Modeling= sevenBitToUint32( 0x00, 0x00, 0x10, 0x00),
+        PcmTone1 =      sevenBitToUint32( 0x00, 0x00, 0x20, 0x00),
+        PcmTone2 =      sevenBitToUint32( 0x00, 0x00, 0x21, 0x00),
+        PcmFilter1 =    sevenBitToUint32( 0x00, 0x00, 0x30, 0x00),
+        PcmFilter2 =    sevenBitToUint32( 0x00, 0x00, 0x31, 0x00)
     };
 
     enum class SysExDataLength
     {
         Common = 0x80+0x80+0x4d,
-        PCMTone = 0x17
+        MFX = 0x80+0x72,
+        ChorDlyRevEq = 0x1E,
+        Preamp = 0x5D,
+        Modeling = 0x80 + 0x4A,
+        PCMTone = 0x17,
+        PCMFilter = 0x34
     };
 
     explicit Patch(QObject *parent = nullptr);
